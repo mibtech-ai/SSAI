@@ -64,7 +64,15 @@ export const setupMCPServer = (): McpServer => {
         new Promise((resolve) => setTimeout(resolve, ms));
       let counter = 0;
 
-      while (count === 0 || counter < count) {
+      // If count is 0, per description, it means 100 notifications.
+      // Default count is 10, default interval is 100ms.
+      // Max execution time:
+      // - Default: 10 notifications * 100ms = 1 second.
+      // - If count = 0 (for 100 notifications): 100 notifications * 100ms = 10 seconds.
+      // This can be close to serverless function timeout limits.
+      const effectiveCount = count === 0 ? 100 : count;
+
+      while (counter < effectiveCount) { // Corrected loop condition
         counter++;
         try {
           await sendNotification({
