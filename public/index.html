@@ -3,134 +3,373 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MCP Express Server</title>
+    <title>MCP Server Demo - Model Context Protocol</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 2rem;
-            line-height: 1.6;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
             color: white;
         }
-        .container {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 2rem;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        h1 {
-            text-align: center;
-            margin-bottom: 2rem;
-            font-size: 2.5rem;
+
+        .header h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
         }
-        .status {
-            background: rgba(76, 175, 80, 0.2);
-            border: 1px solid rgba(76, 175, 80, 0.5);
-            border-radius: 10px;
-            padding: 1rem;
-            margin: 1rem 0;
-            text-align: center;
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
         }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.15);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-icon {
+            font-size: 2rem;
+            margin-right: 1rem;
+        }
+
+        .card h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #2d3748;
+        }
+
+        .status-indicator {
+            display: inline-flex;
+            align-items: center;
+            background: #10b981;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+
+        .status-indicator::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: white;
+            border-radius: 50%;
+            margin-right: 0.5rem;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
         .endpoint {
-            background: rgba(255, 255, 255, 0.1);
+            background: #f7fafc;
+            border: 1px solid #e2e8f0;
             border-radius: 10px;
             padding: 1rem;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 0.9rem;
             margin: 1rem 0;
-            font-family: 'Courier New', monospace;
+            position: relative;
+            overflow-x: auto;
         }
-        .test-button {
-            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+
+        .endpoint .method {
+            background: #3182ce;
+            color: white;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-weight: 600;
+            margin-right: 0.5rem;
+        }
+
+        .feature-list {
+            list-style: none;
+        }
+
+        .feature-list li {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+        }
+
+        .feature-list li:last-child {
+            border-bottom: none;
+        }
+
+        .feature-list li::before {
+            content: '✓';
+            color: #10b981;
+            font-weight: bold;
+            margin-right: 0.5rem;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             border: none;
-            padding: 12px 24px;
-            border-radius: 25px;
-            cursor: pointer;
+            padding: 1rem 2rem;
+            border-radius: 50px;
             font-size: 1rem;
-            margin: 10px;
+            font-weight: 600;
+            cursor: pointer;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            margin: 0.5rem;
         }
-        .test-button:hover {
+
+        .btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.6);
         }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            box-shadow: 0 4px 15px rgba(240, 147, 251, 0.4);
+        }
+
+        .btn-secondary:hover {
+            box-shadow: 0 8px 25px rgba(240, 147, 251, 0.6);
+        }
+
         .result {
-            background: rgba(0, 0, 0, 0.2);
+            background: #1a202c;
+            color: #e2e8f0;
             border-radius: 10px;
-            padding: 1rem;
+            padding: 1.5rem;
             margin: 1rem 0;
-            font-family: 'Courier New', monospace;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 0.9rem;
             white-space: pre-wrap;
-            max-height: 300px;
+            max-height: 400px;
             overflow-y: auto;
+            border: 1px solid #2d3748;
         }
+
         .hidden {
             display: none;
         }
-        .feature {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 10px;
-            padding: 1rem;
-            margin: 1rem 0;
+
+        .demo-section {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            margin-bottom: 2rem;
         }
-        .feature h3 {
-            margin-top: 0;
+
+        .demo-controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .input-group {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #4a5568;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .footer {
+            text-align: center;
+            color: white;
+            opacity: 0.8;
+            margin-top: 3rem;
+        }
+
+        .footer a {
             color: #ffd700;
+            text-decoration: none;
+            margin: 0 1rem;
+            transition: opacity 0.3s ease;
+        }
+
+        .footer a:hover {
+            opacity: 0.8;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .header h1 {
+                font-size: 2.5rem;
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            .demo-controls {
+                flex-direction: column;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>🚀 MCP Express Server</h1>
-        
-        <div class="status">
-            <h2>✅ Server Status: Running</h2>
-            <p>Your Model Context Protocol server is up and running!</p>
+        <div class="header">
+            <h1>🚀 MCP Server Demo</h1>
+            <p>Experience the power of Model Context Protocol with this interactive demonstration</p>
         </div>
 
-        <div class="feature">
-            <h3>📡 MCP Endpoint</h3>
-            <div class="endpoint">
-                <strong>POST</strong> /mcp
+        <div class="grid">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon">📡</div>
+                    <h3>Server Status</h3>
+                </div>
+                <div class="status-indicator">
+                    Server Online
+                </div>
+                <p>Your MCP server is running and ready to handle requests from compatible clients.</p>
+                <div class="endpoint">
+                    <span class="method">POST</span>/mcp
+                </div>
             </div>
-            <p>This endpoint handles MCP (Model Context Protocol) requests from compatible clients.</p>
-        </div>
 
-        <div class="feature">
-            <h3>🛠️ Available Features</h3>
-            <ul>
-                <li><strong>Greeting Template:</strong> A prompt template for generating greetings</li>
-                <li><strong>Notification Stream:</strong> Tool for testing periodic notifications</li>
-                <li><strong>Greeting Resource:</strong> A simple text resource</li>
-            </ul>
-        </div>
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon">🛠️</div>
+                    <h3>Available Features</h3>
+                </div>
+                <ul class="feature-list">
+                    <li>Greeting Template System</li>
+                    <li>Notification Streaming</li>
+                    <li>Resource Management</li>
+                    <li>Tool Integration</li>
+                </ul>
+            </div>
 
-        <div class="feature">
-            <h3>🧪 Test the Server</h3>
-            <p>Click the button below to test if the MCP endpoint is responding:</p>
-            <button class="test-button" onclick="testMCPEndpoint()">Test MCP Endpoint</button>
-            <div id="testResult" class="result hidden"></div>
-        </div>
-
-        <div class="feature">
-            <h3>🔗 How to Connect</h3>
-            <p>To connect an MCP client to this server, use:</p>
-            <div class="endpoint">
-                npx @modelcontextprotocol/inspector npx mcp-remote@next <span id="serverUrl"></span>/mcp
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon">🔗</div>
+                    <h3>Quick Connect</h3>
+                </div>
+                <p>Connect your MCP client using:</p>
+                <div class="endpoint">
+                    npx @modelcontextprotocol/inspector npx mcp-remote@next <span id="serverUrl"></span>/mcp
+                </div>
+                <button class="btn" onclick="copyToClipboard()">📋 Copy Command</button>
             </div>
         </div>
 
-        <div class="feature">
-            <h3>📚 Learn More</h3>
+        <div class="demo-section">
+            <div class="card-header">
+                <div class="card-icon">🧪</div>
+                <h3>Interactive Demo</h3>
+            </div>
+            <p>Test the MCP server functionality with these interactive examples:</p>
+            
+            <div class="demo-controls">
+                <button class="btn" onclick="testInitialize()">🔌 Initialize Connection</button>
+                <button class="btn btn-secondary" onclick="testGreeting()">👋 Test Greeting</button>
+                <button class="btn" onclick="testNotifications()">📢 Test Notifications</button>
+                <button class="btn btn-secondary" onclick="testResources()">📄 Test Resources</button>
+            </div>
+
+            <div class="demo-controls">
+                <div class="input-group">
+                    <label for="greetingName">Name for Greeting:</label>
+                    <input type="text" id="greetingName" value="World" placeholder="Enter a name">
+                </div>
+                <div class="input-group">
+                    <label for="notificationCount">Notification Count:</label>
+                    <input type="number" id="notificationCount" value="5" min="1" max="20">
+                </div>
+            </div>
+
+            <div id="demoResult" class="result hidden"></div>
+        </div>
+
+        <div class="footer">
             <p>
-                <a href="https://modelcontextprotocol.io/" target="_blank" style="color: #ffd700;">Model Context Protocol Documentation</a><br>
-                <a href="https://docs.netlify.com/functions/overview/" target="_blank" style="color: #ffd700;">Netlify Functions Documentation</a>
+                <a href="https://modelcontextprotocol.io/" target="_blank">📚 MCP Documentation</a>
+                <a href="https://docs.netlify.com/functions/overview/" target="_blank">⚡ Netlify Functions</a>
+                <a href="https://github.com/modelcontextprotocol" target="_blank">💻 GitHub</a>
+            </p>
+            <p style="margin-top: 1rem; font-size: 0.9rem;">
+                Built with ❤️ using Model Context Protocol and Netlify Functions
             </p>
         </div>
     </div>
@@ -139,12 +378,17 @@
         // Set the current server URL
         document.getElementById('serverUrl').textContent = window.location.origin;
 
-        async function testMCPEndpoint() {
-            const resultDiv = document.getElementById('testResult');
+        function showResult(message, isError = false) {
+            const resultDiv = document.getElementById('demoResult');
             resultDiv.classList.remove('hidden');
-            resultDiv.textContent = 'Testing MCP endpoint...';
+            resultDiv.textContent = message;
+            resultDiv.style.borderLeft = isError ? '4px solid #f56565' : '4px solid #48bb78';
+        }
 
+        async function makeRequest(method, params = {}) {
             try {
+                showResult('🔄 Processing request...');
+                
                 const response = await fetch('/mcp', {
                     method: 'POST',
                     headers: {
@@ -152,25 +396,97 @@
                     },
                     body: JSON.stringify({
                         jsonrpc: '2.0',
-                        method: 'initialize',
-                        params: {
-                            protocolVersion: '2024-11-05',
-                            capabilities: {},
-                            clientInfo: {
-                                name: 'test-client',
-                                version: '1.0.0'
-                            }
-                        },
-                        id: 1
+                        method: method,
+                        params: params,
+                        id: Date.now()
                     })
                 });
 
                 const data = await response.json();
-                resultDiv.textContent = `✅ MCP Endpoint Response:\n${JSON.stringify(data, null, 2)}`;
+                showResult(`✅ ${method.toUpperCase()} Response:\n${JSON.stringify(data, null, 2)}`);
             } catch (error) {
-                resultDiv.textContent = `❌ Error testing MCP endpoint:\n${error.message}`;
+                showResult(`❌ Error with ${method}:\n${error.message}`, true);
             }
         }
+
+        async function testInitialize() {
+            await makeRequest('initialize', {
+                protocolVersion: '2024-11-05',
+                capabilities: {
+                    tools: {},
+                    prompts: {},
+                    resources: {}
+                },
+                clientInfo: {
+                    name: 'demo-client',
+                    version: '1.0.0'
+                }
+            });
+        }
+
+        async function testGreeting() {
+            const name = document.getElementById('greetingName').value || 'World';
+            await makeRequest('prompts/get', {
+                name: 'greeting-template',
+                arguments: { name: name }
+            });
+        }
+
+        async function testNotifications() {
+            const count = parseInt(document.getElementById('notificationCount').value) || 5;
+            await makeRequest('tools/call', {
+                name: 'start-notification-stream',
+                arguments: {
+                    interval: 1000,
+                    count: count
+                }
+            });
+        }
+
+        async function testResources() {
+            await makeRequest('resources/read', {
+                uri: 'https://example.com/greetings/default'
+            });
+        }
+
+        function copyToClipboard() {
+            const command = `npx @modelcontextprotocol/inspector npx mcp-remote@next ${window.location.origin}/mcp`;
+            navigator.clipboard.writeText(command).then(() => {
+                const btn = event.target;
+                const originalText = btn.textContent;
+                btn.textContent = '✅ Copied!';
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                }, 2000);
+            }).catch(() => {
+                showResult('❌ Failed to copy to clipboard', true);
+            });
+        }
+
+        // Add some interactive animations
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.card');
+            cards.forEach((card, index) => {
+                card.style.animationDelay = `${index * 0.1}s`;
+                card.style.animation = 'fadeInUp 0.6s ease forwards';
+            });
+        });
+
+        // Add CSS animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes fadeInUp {
+                from {
+                    opacity: 0;
+                    transform: translateY(30px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+        `;
+        document.head.appendChild(style);
     </script>
 </body>
 </html>
