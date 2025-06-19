@@ -145,8 +145,8 @@ class SmartSecureApp {
     handleLogin(e) {
         e.preventDefault();
         const formData = new FormData(e.target);
-        const email = formData.get('email') || e.target.querySelector('input[type="email"]').value;
-        const password = formData.get('password') || e.target.querySelector('input[type="password"]').value;
+        const email = formData.get('email');
+        const password = formData.get('password');
 
         // Simple validation (in real app, this would be server-side)
         if (email && password) {
@@ -170,14 +170,24 @@ class SmartSecureApp {
     }
 
     showApp() {
-        document.getElementById('login-screen').classList.add('hidden');
-        document.getElementById('app-container').classList.remove('hidden');
-        this.navigateToPage('dashboard');
+        const loginScreen = document.getElementById('login-screen');
+        const appContainer = document.getElementById('app-container');
+        
+        if (loginScreen && appContainer) {
+            loginScreen.classList.add('hidden');
+            appContainer.classList.remove('hidden');
+            this.navigateToPage('dashboard');
+        }
     }
 
     showLogin() {
-        document.getElementById('app-container').classList.add('hidden');
-        document.getElementById('login-screen').classList.remove('hidden');
+        const loginScreen = document.getElementById('login-screen');
+        const appContainer = document.getElementById('app-container');
+        
+        if (loginScreen && appContainer) {
+            appContainer.classList.add('hidden');
+            loginScreen.classList.remove('hidden');
+        }
     }
 
     checkAuthState() {
@@ -243,8 +253,11 @@ class SmartSecureApp {
 
         const pageInfo = titles[page] || { title: 'SmartSecure.AI', subtitle: 'AI-Powered Security Platform' };
         
-        document.getElementById('page-title').textContent = pageInfo.title;
-        document.getElementById('page-subtitle').textContent = pageInfo.subtitle;
+        const pageTitle = document.getElementById('page-title');
+        const pageSubtitle = document.getElementById('page-subtitle');
+        
+        if (pageTitle) pageTitle.textContent = pageInfo.title;
+        if (pageSubtitle) pageSubtitle.textContent = pageInfo.subtitle;
     }
 
     loadPageData(page) {
@@ -295,7 +308,7 @@ class SmartSecureApp {
         const activities = this.activities.slice(0, 10); // Show latest 10
         
         tbody.innerHTML = activities.map(activity => `
-            <tr class="table-row">
+            <tr class="table-row hover:bg-gray-50 dark:hover:bg-gray-700">
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
                     ${activity.time}
                 </td>
@@ -326,7 +339,7 @@ class SmartSecureApp {
         if (!tbody) return;
 
         tbody.innerHTML = this.cameras.map(camera => `
-            <tr class="table-row">
+            <tr class="table-row hover:bg-gray-50 dark:hover:bg-gray-700">
                 <td class="px-6 py-4 whitespace-nowrap">
                     <div class="flex items-center">
                         <img src="${camera.thumbnail}" alt="${camera.name}" class="w-12 h-12 rounded-lg mr-4">
@@ -369,7 +382,7 @@ class SmartSecureApp {
         }
 
         tbody.innerHTML = filteredUsers.map(user => `
-            <tr class="table-row">
+            <tr class="table-row hover:bg-gray-50 dark:hover:bg-gray-700">
                 <td class="px-6 py-4 whitespace-nowrap">
                     <div class="flex items-center">
                         <img src="${user.avatar}" alt="${user.name}" class="w-10 h-10 rounded-full mr-4">
@@ -403,7 +416,7 @@ class SmartSecureApp {
         if (!tbody) return;
 
         tbody.innerHTML = this.activities.map(activity => `
-            <tr class="table-row">
+            <tr class="table-row hover:bg-gray-50 dark:hover:bg-gray-700">
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
                     ${activity.timestamp}
                 </td>
@@ -440,7 +453,7 @@ class SmartSecureApp {
         ];
 
         tbody.innerHTML = reportData.map(row => `
-            <tr class="table-row">
+            <tr class="table-row hover:bg-gray-50 dark:hover:bg-gray-700">
                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-100">
                     ${row.metric}
                 </td>
@@ -549,8 +562,13 @@ class SmartSecureApp {
         e.preventDefault();
         
         // Update active tab
-        document.querySelectorAll('.user-tab').forEach(tab => tab.classList.remove('active'));
-        e.currentTarget.classList.add('active');
+        document.querySelectorAll('.user-tab').forEach(tab => {
+            tab.classList.remove('active', 'border-blue-500', 'text-blue-600', 'dark:text-blue-400');
+            tab.classList.add('border-transparent', 'text-gray-500', 'dark:text-gray-400');
+        });
+        
+        e.currentTarget.classList.remove('border-transparent', 'text-gray-500', 'dark:text-gray-400');
+        e.currentTarget.classList.add('active', 'border-blue-500', 'text-blue-600', 'dark:text-blue-400');
         
         // Re-render users table with filter
         this.renderUsersTable();
@@ -587,10 +605,10 @@ class SmartSecureApp {
         
         const newCamera = {
             id: 'CAM-' + Date.now(),
-            name: formData.get('name') || e.target.querySelector('input[type="text"]').value,
-            location: formData.get('location') || e.target.querySelectorAll('input[type="text"]')[1].value,
-            ip: formData.get('ip') || e.target.querySelectorAll('input[type="text"]')[2].value,
-            resolution: formData.get('resolution') || e.target.querySelector('select').value,
+            name: formData.get('name'),
+            location: formData.get('location'),
+            ip: formData.get('ip'),
+            resolution: formData.get('resolution'),
             status: 'Online',
             thumbnail: 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=100&h=100&fit=crop'
         };
@@ -612,10 +630,10 @@ class SmartSecureApp {
         
         const newUser = {
             id: 'USER-' + Date.now(),
-            name: formData.get('name') || e.target.querySelector('input[type="text"]').value,
-            email: formData.get('email') || e.target.querySelector('input[type="email"]').value,
-            role: formData.get('role') || e.target.querySelector('select').value,
-            department: formData.get('department') || e.target.querySelectorAll('input[type="text"]')[1].value,
+            name: formData.get('name'),
+            email: formData.get('email'),
+            role: formData.get('role'),
+            department: formData.get('department'),
             lastAccess: 'Just now',
             avatar: `https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=face`
         };
@@ -643,14 +661,14 @@ class SmartSecureApp {
 
     getStatusClass(status) {
         const classes = {
-            'Online': 'status-online',
-            'Offline': 'status-offline',
-            'Access Granted': 'status-online',
-            'Access Denied': 'status-offline',
-            'Suspicious': 'status-warning',
-            'Warning': 'status-warning'
+            'Online': 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400',
+            'Offline': 'bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400',
+            'Access Granted': 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400',
+            'Access Denied': 'bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400',
+            'Suspicious': 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-400',
+            'Warning': 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-400'
         };
-        return classes[status] || 'status-warning';
+        return classes[status] || 'bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-400';
     }
 
     getRoleClass(role) {
