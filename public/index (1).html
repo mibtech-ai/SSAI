@@ -1,0 +1,1604 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartSecure.AI</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Custom Styles -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0C1F3F;
+            color: #E0E0E0;
+        }
+        /* Custom scrollbar for a more modern look */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0C1F3F;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1E3A5F;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #2a528a;
+        }
+        /* Neon green accent */
+        .accent-color {
+            color: #00FFAB;
+        }
+        .bg-accent {
+            background-color: #00FFAB;
+        }
+        .border-accent {
+            border-color: #00FFAB;
+        }
+        /* Main background color */
+        .bg-main {
+            background-color: #0C1F3F;
+        }
+        /* Card/panel background color */
+        .bg-panel {
+            background-color: #11284D;
+        }
+        /* Subtle border for panels */
+        .border-panel {
+            border: 1px solid #1E3A5F;
+        }
+        /* Active nav item style */
+        .nav-active {
+            background-color: rgba(0, 255, 171, 0.1);
+            color: #00FFAB;
+            border-left: 3px solid #00FFAB;
+        }
+        .nav-item:hover {
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+        /* User Tab Styling */
+        .user-tab {
+            border-bottom: 2px solid transparent;
+        }
+        .user-tab-active {
+            color: #00FFAB;
+            border-bottom-color: #00FFAB;
+        }
+        /* Custom Toggle Switch */
+        .toggle-checkbox:checked {
+            background-color: #00FFAB;
+        }
+        .toggle-checkbox:checked + .toggle-label {
+            background-color: #00FFAB;
+        }
+        .toggle-checkbox:checked + .toggle-label .toggle-circle {
+            transform: translateX(100%);
+            background-color: #0C1F3F;
+        }
+
+        /* Animation for page transitions */
+        .page, .modal {
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        .modal-content {
+             animation: slideUp 0.3s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- LOGIN SCREEN -->
+    <div id="login-screen" class="min-h-screen flex items-center justify-center bg-main p-4">
+        <div class="w-full max-w-md bg-panel border-panel rounded-lg shadow-2xl p-8 text-center">
+            <h1 class="text-3xl font-bold mb-2">Smart<span class="accent-color">Secure</span>.AI</h1>
+            <p class="text-gray-400 mb-8">AI-Powered Security Platform</p>
+            <form id="login-form">
+                <div class="mb-4">
+                    <input type="email" placeholder="Email" class="w-full p-3 bg-main border border-panel rounded-md focus:outline-none focus:ring-2 focus:ring-accent" required value="admin@smartsecure.ai">
+                </div>
+                <div class="mb-6">
+                    <input type="password" placeholder="Password" class="w-full p-3 bg-main border border-panel rounded-md focus:outline-none focus:ring-2 focus:ring-accent" required value="password">
+                </div>
+                <button type="submit" class="w-full bg-accent text-gray-900 font-bold py-3 rounded-md hover:bg-opacity-90 transition duration-300">
+                    Login
+                </button>
+            </form>
+            <p class="text-xs text-gray-500 mt-8">© 2025 SmartSecure.AI. All rights reserved.</p>
+        </div>
+    </div>
+
+    <!-- MAIN APPLICATION -->
+    <div id="app-container" class="hidden min-h-screen md:flex">
+        <!-- SIDEBAR -->
+        <aside id="sidebar" class="bg-panel w-64 flex-shrink-0 p-4 flex flex-col justify-between transition-all duration-300">
+            <div>
+                <div class="px-4 mb-8">
+                    <h1 class="text-2xl font-bold">Smart<span class="accent-color">Secure</span>.AI</h1>
+                </div>
+                <nav id="main-nav">
+                    <ul>
+                        <li><a href="#dashboard" class="nav-item flex items-center p-3 my-1 rounded-lg nav-active">
+                            <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
+                            Dashboard</a></li>
+                        <li><a href="#cameras" class="nav-item flex items-center p-3 my-1 rounded-lg">
+                            <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                            Cameras</a></li>
+                        <li><a href="#access-management" class="nav-item flex items-center p-3 my-1 rounded-lg">
+                            <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                            Access Management</a></li>
+                        <li><a href="#history" class="nav-item flex items-center p-3 my-1 rounded-lg">
+                            <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            Activity History</a></li>
+                        <li><a href="#reports" class="nav-item flex items-center p-3 my-1 rounded-lg">
+                            <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+                            Reports</a></li>
+                        <li><a href="#settings" class="nav-item flex items-center p-3 my-1 rounded-lg">
+                            <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                            Settings</a></li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="px-4">
+                 <button id="logout-button" class="w-full nav-item flex items-center p-3 my-1 rounded-lg text-red-400">
+                    <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+                    Logout
+                </button>
+            </div>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="flex-1 bg-main p-4 md:p-8 overflow-y-auto">
+            <!-- HEADER -->
+            <header class="flex justify-between items-center mb-8">
+                 <div>
+                    <h2 id="page-title" class="text-3xl font-bold">Dashboard</h2>
+                    <p id="page-subtitle" class="text-gray-400">Overview of all security systems</p>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button class="p-2 rounded-full hover:bg-panel transition">
+                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
+                    </button>
+                    <div class="flex items-center space-x-3">
+                         <img src="https://placehold.co/40x40/0C1F3F/FFFFFF?text=A" alt="Admin" class="w-10 h-10 rounded-full border-2 border-accent">
+                         <div>
+                            <p class="font-semibold">Alex Morgan</p>
+                            <p class="text-xs text-gray-400">System Administrator</p>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- PAGES CONTAINER -->
+            <div id="pages">
+                <!-- Dashboard Page -->
+                <div id="dashboard-page" class="page">
+                    <!-- Live Feeds -->
+                    <h3 class="text-xl font-semibold mb-4">Live Feeds</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                        <div class="bg-panel p-4 rounded-lg border-panel shadow-lg hover:border-accent transition-colors duration-300">
+                            <img src="https://placehold.co/600x400/11284D/333333?text=Lobby+Feed" class="rounded-md mb-2 w-full object-cover aspect-video">
+                            <p class="font-semibold">Lobby Cam</p>
+                            <p class="text-sm text-gray-400">Status: <span class="text-green-400">Online</span></p>
+                        </div>
+                         <div class="bg-panel p-4 rounded-lg border-panel shadow-lg hover:border-accent transition-colors duration-300">
+                            <div class="relative">
+                               <img src="https://placehold.co/600x400/11284D/333333?text=Entrance+Feed" class="rounded-md mb-2 w-full object-cover aspect-video">
+                               <div class="absolute inset-0 border-2 border-accent rounded-md flex items-center justify-center bg-black bg-opacity-50">
+                                   <span class="accent-color font-bold text-lg animate-pulse">FACE DETECTED</span>
+                               </div>
+                            </div>
+                            <p class="font-semibold">Main Entrance</p>
+                            <p class="text-sm text-gray-400">Status: <span class="text-green-400">Online</span></p>
+                        </div>
+                        <div class="bg-panel p-4 rounded-lg border-panel shadow-lg hover:border-accent transition-colors duration-300">
+                            <img src="https://placehold.co/600x400/11284D/333333?text=Parking+Feed" class="rounded-md mb-2 w-full object-cover aspect-video">
+                            <p class="font-semibold">Parking Lot P1-A</p>
+                            <p class="text-sm text-gray-400">Status: <span class="text-green-400">Online</span></p>
+                        </div>
+                        <div class="bg-panel p-4 rounded-lg border-panel shadow-lg">
+                            <img src="https://placehold.co/600x400/990000/FFFFFF?text=Offline" class="rounded-md mb-2 w-full object-cover aspect-video">
+                            <p class="font-semibold">Rooftop Access</p>
+                            <p class="text-sm text-gray-400">Status: <span class="text-red-500">Offline</span></p>
+                        </div>
+                    </div>
+                    
+                    <!-- AI Face Detection Alerts -->
+                    <h3 class="text-xl font-semibold mb-4">Real-time AI Alerts</h3>
+                    <div class="bg-panel rounded-lg border-panel shadow-lg overflow-hidden">
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left">
+                                <thead class="bg-main">
+                                    <tr>
+                                        <th class="p-4 font-semibold">Timestamp</th>
+                                        <th class="p-4 font-semibold">Camera</th>
+                                        <th class="p-4 font-semibold">Detection</th>
+                                        <th class="p-4 font-semibold">Status</th>
+                                        <th class="p-4 font-semibold text-center">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="border-t border-panel hover:bg-gray-800/20">
+                                        <td class="p-4">02:15:33 PM</td>
+                                        <td class="p-4">Main Entrance</td>
+                                        <td class="p-4 flex items-center">
+                                            <img src="https://placehold.co/32x32/00FFAB/0C1F3F?text=U" class="w-8 h-8 rounded-full mr-3 border-2 border-accent" data-name="Unknown Face">
+                                            <span class="accent-color">Unknown Face</span>
+                                        </td>
+                                        <td class="p-4"><span class="bg-yellow-500/20 text-yellow-300 px-2 py-1 rounded-full text-xs font-semibold">Suspicious</span></td>
+                                        <td class="p-4">
+                                            <div class="flex justify-center items-center space-x-2">
+                                                <button class="action-btn bg-yellow-500/20 border border-yellow-400/50 text-yellow-300/90 px-3 py-1 rounded-md text-sm hover:bg-yellow-500/30 transition-colors">Action</button>
+                                                <button class="view-btn text-accent hover:underline text-sm font-semibold">View</button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr class="border-t border-panel hover:bg-gray-800/20">
+                                        <td class="p-4">02:14:58 PM</td>
+                                        <td class="p-4">Lobby Cam</td>
+                                        <td class="p-4 flex items-center">
+                                            <img src="https://placehold.co/32x32/FFFFFF/0C1F3F?text=E" class="w-8 h-8 rounded-full mr-3" data-name="Ethan Vance">
+                                            <span>Ethan Vance (Employee)</span>
+                                        </td>
+                                        <td class="p-4"><span class="bg-green-500/20 text-green-300 px-2 py-1 rounded-full text-xs font-semibold">Access Granted</span></td>
+                                        <td class="p-4">
+                                            <div class="flex justify-center items-center space-x-2">
+                                                <button class="action-btn bg-panel border border-gray-600/50 text-gray-300/90 px-3 py-1 rounded-md text-sm hover:bg-gray-500/20 transition-colors">Action</button>
+                                                <button class="view-btn text-accent hover:underline text-sm font-semibold">View</button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr class="border-t border-panel hover:bg-gray-800/20">
+                                        <td class="p-4">02:12:10 PM</td>
+                                        <td class="p-4">Parking Lot P1-A</td>
+                                        <td class="p-4 flex items-center">
+                                            <img src="https://placehold.co/32x32/FF0000/FFFFFF?text=X" class="w-8 h-8 rounded-full mr-3 border-2 border-red-500" data-name="Denied User">
+                                            <span>Denied User</span>
+                                        </td>
+                                        <td class="p-4"><span class="bg-red-500/20 text-red-300 px-2 py-1 rounded-full text-xs font-semibold">Access Denied</span></td>
+                                        <td class="p-4">
+                                            <div class="flex justify-center items-center space-x-2">
+                                                <button class="action-btn bg-red-500/20 border border-red-400/50 text-red-300/90 px-3 py-1 rounded-md text-sm hover:bg-red-500/30 transition-colors">Action</button>
+                                                <button class="view-btn text-accent hover:underline text-sm font-semibold">View</button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cameras Page -->
+                <div id="cameras-page" class="page hidden">
+                     <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-2xl font-bold">Cameras</h3>
+                        <button id="add-camera-btn" class="bg-accent text-gray-900 font-bold py-2 px-4 rounded-md hover:bg-opacity-90 transition duration-300">
+                            Add Camera
+                        </button>
+                    </div>
+                    <div class="bg-panel rounded-lg border-panel shadow-lg overflow-hidden">
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left">
+                                <thead class="bg-main">
+                                    <tr>
+                                        <th class="p-4 font-semibold">Name</th>
+                                        <th class="p-4 font-semibold">Status</th>
+                                        <th class="p-4 font-semibold">Last Activity</th>
+                                        <th class="p-4 font-semibold">Face Logs</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="camera-list-table">
+                                    <tr class="border-t border-panel hover:bg-gray-800/20">
+                                        <td class="p-4 font-semibold">Lobby Cam</td>
+                                        <td class="p-4"><span class="bg-green-500/20 text-green-300 px-2 py-1 rounded-full text-xs font-semibold">Online</span></td>
+                                        <td class="p-4 text-gray-400">5 minutes ago</td>
+                                        <td class="p-4"><button class="view-logs-btn text-accent hover:underline text-sm font-semibold" data-camera-name="Lobby Cam">View Logs</button></td>
+                                    </tr>
+                                    <tr class="border-t border-panel hover:bg-gray-800/20">
+                                        <td class="p-4 font-semibold">Main Entrance</td>
+                                        <td class="p-4"><span class="bg-green-500/20 text-green-300 px-2 py-1 rounded-full text-xs font-semibold">Online</span></td>
+                                        <td class="p-4 text-gray-400">1 minute ago</td>
+                                        <td class="p-4"><button class="view-logs-btn text-accent hover:underline text-sm font-semibold" data-camera-name="Main Entrance">View Logs</button></td>
+                                    </tr>
+                                    <tr class="border-t border-panel hover:bg-gray-800/20">
+                                        <td class="p-4 font-semibold">Back Exit Camera</td>
+                                        <td class="p-4"><span class="bg-red-500/20 text-red-300 px-2 py-1 rounded-full text-xs font-semibold">Offline</span></td>
+                                        <td class="p-4 text-gray-400">2 hours ago</td>
+                                        <td class="p-4"><button class="view-logs-btn text-accent hover:underline text-sm font-semibold" data-camera-name="Back Exit Camera">View Logs</button></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Face Recognition Log Page -->
+                <div id="face-log-page" class="page hidden">
+                     <div>
+                        <h3 id="face-log-title" class="text-2xl font-bold">Camera: Face Recognition Log</h3>
+                        <p class="text-gray-400 mb-6">Detailed log of recognized and unrecognized faces.</p>
+                    </div>
+                    <div class="mb-4">
+                        <div class="relative">
+                            <input type="text" placeholder="Search by name or event ID" class="w-full p-3 pl-10 bg-panel border-panel rounded-md focus:outline-none focus:ring-2 focus:ring-accent">
+                            <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                                <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                            </div>
+                        </div>
+                    </div>
+                     <div class="bg-panel rounded-lg border-panel shadow-lg overflow-hidden">
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left">
+                                <thead class="bg-main">
+                                    <tr>
+                                        <th class="p-4 font-semibold">Timestamp</th>
+                                        <th class="p-4 font-semibold">Event ID</th>
+                                        <th class="p-4 font-semibold">Face Snapshot</th>
+                                        <th class="p-4 font-semibold">Recognition Status</th>
+                                        <th class="p-4 font-semibold">Details</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="face-log-table"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Add Camera Page -->
+                <div id="add-camera-page" class="page hidden">
+                    <h3 class="text-2xl font-bold mb-6">Add Camera</h3>
+                    <div class="bg-panel rounded-lg border-panel shadow-lg p-6">
+                        <form id="add-camera-form" class="space-y-6">
+                            <div>
+                                <label for="camera-name" class="block text-sm font-medium text-gray-300 mb-1">Camera Name</label>
+                                <input type="text" id="camera-name" placeholder="Enter camera name" class="w-full p-3 bg-main border border-panel rounded-md focus:outline-none focus:ring-2 focus:ring-accent">
+                            </div>
+                            <div>
+                                <label for="ip-address" class="block text-sm font-medium text-gray-300 mb-1">IP Address</label>
+                                <input type="text" id="ip-address" placeholder="Enter IP address" class="w-full p-3 bg-main border border-panel rounded-md focus:outline-none focus:ring-2 focus:ring-accent">
+                            </div>
+                             <div>
+                                <label for="location" class="block text-sm font-medium text-gray-300 mb-1">Location</label>
+                                <select id="location" class="w-full p-3 bg-main border border-panel rounded-md focus:outline-none focus:ring-2 focus:ring-accent appearance-none">
+                                    <option>Select location</option>
+                                    <option>Lobby</option>
+                                    <option>Main Entrance</option>
+                                    <option>Parking Lot</option>
+                                    <option>Rooftop</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="status" class="block text-sm font-medium text-gray-300 mb-1">Status</label>
+                                <select id="status" class="w-full p-3 bg-main border border-panel rounded-md focus:outline-none focus:ring-2 focus:ring-accent appearance-none">
+                                    <option>Select status</option>
+                                    <option>Online</option>
+                                    <option>Offline</option>
+                                </select>
+                            </div>
+                             <div class="flex space-x-6">
+                                <div class="flex-1">
+                                    <label for="resolution" class="block text-sm font-medium text-gray-300 mb-1">Resolution</label>
+                                    <select id="resolution" class="w-full p-3 bg-main border border-panel rounded-md focus:outline-none focus:ring-2 focus:ring-accent appearance-none">
+                                        <option>Select resolution</option>
+                                        <option>1080p (Full HD)</option>
+                                        <option>4K (UHD)</option>
+                                        <option>720p (HD)</option>
+                                    </select>
+                                </div>
+                                 <div class="flex-1">
+                                    <label for="frame-rate" class="block text-sm font-medium text-gray-300 mb-1">Frame Rate</label>
+                                    <select id="frame-rate" class="w-full p-3 bg-main border border-panel rounded-md focus:outline-none focus:ring-2 focus:ring-accent appearance-none">
+                                        <option>Select frame rate</option>
+                                        <option>30 FPS</option>
+                                        <option>60 FPS</option>
+                                        <option>24 FPS (Cinematic)</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="flex justify-end space-x-4 pt-4">
+                                <button type="button" id="cancel-add-camera" class="bg-gray-600/50 hover:bg-gray-600/80 text-white font-bold py-2 px-6 rounded-md transition-colors">Cancel</button>
+                                <button type="submit" class="bg-accent text-gray-900 font-bold py-2 px-6 rounded-md hover:bg-opacity-90 transition duration-300">Save</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                
+                <!-- Access Management Page -->
+                <div id="access-management-page" class="page hidden">
+                    <div class="flex justify-between items-center mb-6">
+                        <div>
+                            <h3 class="text-2xl font-bold">Access Management</h3>
+                            <p class="text-gray-400">Manage your user and guest list.</p>
+                        </div>
+                         <button id="add-user-btn" class="bg-accent text-gray-900 font-bold py-2 px-4 rounded-md hover:bg-opacity-90 transition duration-300">
+                            + Add User
+                        </button>
+                    </div>
+                    <div class="mb-4 border-b border-gray-700">
+                        <nav class="-mb-px flex space-x-6" aria-label="Tabs">
+                            <a href="#" data-filter="all" class="user-tab user-tab-active whitespace-nowrap py-3 px-1 border-b-2 font-medium text-sm">All Users</a>
+                            <a href="#" data-filter="employee" class="user-tab text-gray-400 hover:text-white whitespace-nowrap py-3 px-1 border-b-2 font-medium text-sm">Employees</a>
+                            <a href="#" data-filter="guest" class="user-tab text-gray-400 hover:text-white whitespace-nowrap py-3 px-1 border-b-2 font-medium text-sm">Guests</a>
+                        </nav>
+                    </div>
+                     <div class="bg-panel rounded-lg border-panel shadow-lg overflow-hidden">
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left">
+                                <thead class="bg-main">
+                                    <tr>
+                                        <th class="p-4 font-semibold">Name</th>
+                                        <th class="p-4 font-semibold">Email</th>
+                                        <th class="p-4 font-semibold">Company / Department</th>
+                                        <th class="p-4 font-semibold">Status</th>
+                                        <th class="p-4 font-semibold">Last Visit</th>
+                                        <th class="p-4 font-semibold">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="user-list-table"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Add User Choice Page -->
+                <div id="add-user-choice-page" class="page hidden">
+                    <h3 class="text-2xl font-bold mb-6">Register a New Person</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <button id="go-to-register-user-btn" class="bg-panel p-8 rounded-lg border-panel shadow-lg text-center hover:border-accent transition-colors duration-300">
+                            <h4 class="text-xl font-bold accent-color mb-2">Register New User</h4>
+                            <p class="text-gray-400">Add a permanent employee to the system with specific roles and department.</p>
+                        </button>
+                        <button id="go-to-register-guest-btn" class="bg-panel p-8 rounded-lg border-panel shadow-lg text-center hover:border-accent transition-colors duration-300">
+                            <h4 class="text-xl font-bold accent-color mb-2">Register Guest</h4>
+                            <p class="text-gray-400">Add a temporary visitor with specific visit details and purpose.</p>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Register New User (Employee) Page -->
+                <div id="register-user-page" class="page hidden">
+                    <h3 class="text-2xl font-bold mb-6">Register New User</h3>
+                    <div class="bg-panel rounded-lg border-panel shadow-lg p-6">
+                        <form id="register-user-form" class="space-y-6">
+                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label for="user-full-name" class="block text-sm font-medium text-gray-300 mb-1">Full Name</label>
+                                    <input type="text" id="user-full-name" placeholder="Enter full name" class="w-full p-3 bg-main border border-panel rounded-md focus:outline-none focus:ring-2 focus:ring-accent">
+                                </div>
+                                <div>
+                                    <label for="user-email" class="block text-sm font-medium text-gray-300 mb-1">Email</label>
+                                    <input type="email" id="user-email" placeholder="Enter email" class="w-full p-3 bg-main border border-panel rounded-md focus:outline-none focus:ring-2 focus:ring-accent">
+                                </div>
+                                 <div>
+                                    <label for="user-phone" class="block text-sm font-medium text-gray-300 mb-1">Phone Number</label>
+                                    <input type="tel" id="user-phone" placeholder="Enter phone number" class="w-full p-3 bg-main border border-panel rounded-md focus:outline-none focus:ring-2 focus:ring-accent">
+                                </div>
+                                 <div>
+                                    <label for="user-role" class="block text-sm font-medium text-gray-300 mb-1">Role</label>
+                                    <select id="user-role" class="w-full p-3 bg-main border border-panel rounded-md focus:outline-none focus:ring-2 focus:ring-accent appearance-none">
+                                        <option>Select role</option>
+                                        <option>Admin</option>
+                                        <option>Employee</option>
+                                        <option>Manager</option>
+                                    </select>
+                                </div>
+                                 <div>
+                                    <label for="user-department" class="block text-sm font-medium text-gray-300 mb-1">Department</label>
+                                    <select id="user-department" class="w-full p-3 bg-main border border-panel rounded-md focus:outline-none focus:ring-2 focus:ring-accent appearance-none">
+                                        <option>Select department</option>
+                                        <option>Engineering</option>
+                                        <option>Sales</option>
+                                        <option>HR</option>
+                                    </select>
+                                </div>
+                                 <div>
+                                    <label for="user-employee-id" class="block text-sm font-medium text-gray-300 mb-1">Employee ID</label>
+                                    <input type="text" id="user-employee-id" placeholder="Enter employee ID" class="w-full p-3 bg-main border border-panel rounded-md focus:outline-none focus:ring-2 focus:ring-accent">
+                                </div>
+                                <div>
+                                    <label for="user-password" class="block text-sm font-medium text-gray-300 mb-1">Password</label>
+                                    <input type="password" id="user-password" placeholder="Enter password" class="w-full p-3 bg-main border border-panel rounded-md focus:outline-none focus:ring-2 focus:ring-accent">
+                                </div>
+                                 <div>
+                                    <label for="user-confirm-password" class="block text-sm font-medium text-gray-300 mb-1">Confirm Password</label>
+                                    <input type="password" id="user-confirm-password" placeholder="Confirm password" class="w-full p-3 bg-main border border-panel rounded-md focus:outline-none focus:ring-2 focus:ring-accent">
+                                </div>
+                            </div>
+                             <div class="md:col-span-2">
+                                <label class="block text-sm font-medium text-gray-300 mb-1">Facial Snapshot</label>
+                                <div class="mt-1 bg-main rounded-md p-2">
+                                    <video id="user-video" class="w-full rounded-md aspect-video object-cover" autoplay playsinline></video>
+                                    <canvas id="user-canvas" class="hidden w-full rounded-md aspect-video object-cover"></canvas>
+                                </div>
+                                <button type="button" id="capture-user-btn" class="mt-2 w-full bg-panel hover:bg-gray-700/50 text-white font-bold py-2 px-4 rounded-md transition-colors">Capture Snapshot</button>
+                            </div>
+                            <div class="flex justify-end space-x-4 pt-4">
+                                <button type="button" class="cancel-form-btn bg-gray-600/50 hover:bg-gray-600/80 text-white font-bold py-2 px-6 rounded-md transition-colors">Cancel</button>
+                                <button type="submit" class="bg-accent text-gray-900 font-bold py-2 px-6 rounded-md hover:bg-opacity-90 transition duration-300">Register</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Register Guest Page -->
+                <div id="register-guest-page" class="page hidden">
+                     <h3 class="text-2xl font-bold mb-6">Guest Registration</h3>
+                    <div class="bg-panel rounded-lg border-panel shadow-lg p-6">
+                        <form id="register-guest-form" class="space-y-6">
+                           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label for="guest-name" class="block text-sm font-medium text-gray-300 mb-1">Guest Name</label>
+                                    <input type="text" id="guest-name" placeholder="Enter guest's full name" class="w-full p-3 bg-main border border-panel rounded-md focus:outline-none focus:ring-2 focus:ring-accent">
+                                </div>
+                                <div>
+                                    <label for="guest-contact" class="block text-sm font-medium text-gray-300 mb-1">Contact Information</label>
+                                    <input type="text" id="guest-contact" placeholder="Enter guest's email or phone number" class="w-full p-3 bg-main border border-panel rounded-md focus:outline-none focus:ring-2 focus:ring-accent">
+                                </div>
+                                <div>
+                                    <label for="guest-company" class="block text-sm font-medium text-gray-300 mb-1">Company</label>
+                                    <input type="text" id="guest-company" placeholder="Enter guest's company name" class="w-full p-3 bg-main border border-panel rounded-md focus:outline-none focus:ring-2 focus:ring-accent">
+                                </div>
+                                <div>
+                                    <label for="guest-host" class="block text-sm font-medium text-gray-300 mb-1">Host User</label>
+                                    <select id="guest-host" class="w-full p-3 bg-main border border-panel rounded-md focus:outline-none focus:ring-2 focus:ring-accent appearance-none">
+                                        <option>Select host</option>
+                                        <option>Alex Morgan</option>
+                                        <option>Ethan Vance</option>
+                                    </select>
+                                </div>
+                                 <div class="md:col-span-2">
+                                    <label for="guest-purpose" class="block text-sm font-medium text-gray-300 mb-1">Purpose of Visit</label>
+                                    <input type="text" id="guest-purpose" placeholder="Enter the purpose of the visit" class="w-full p-3 bg-main border border-panel rounded-md focus:outline-none focus:ring-2 focus:ring-accent">
+                                </div>
+                                <div>
+                                    <label for="guest-date" class="block text-sm font-medium text-gray-300 mb-1">Visit Date</label>
+                                    <input type="date" id="guest-date" class="w-full p-3 bg-main border border-panel rounded-md focus:outline-none focus:ring-2 focus:ring-accent">
+                                </div>
+                                 <div>
+                                    <label for="guest-duration" class="block text-sm font-medium text-gray-300 mb-1">Visit Duration</label>
+                                    <input type="text" id="guest-duration" placeholder="e.g., 2 hours" class="w-full p-3 bg-main border border-panel rounded-md focus:outline-none focus:ring-2 focus:ring-accent">
+                                </div>
+                                <div class="md:col-span-2">
+                                    <label class="block text-sm font-medium text-gray-300 mb-1">Facial Snapshot</label>
+                                     <div class="mt-1 bg-main rounded-md p-2">
+                                        <video id="guest-video" class="w-full rounded-md aspect-video object-cover" autoplay playsinline></video>
+                                        <canvas id="guest-canvas" class="hidden w-full rounded-md aspect-video object-cover"></canvas>
+                                    </div>
+                                    <button type="button" id="capture-guest-btn" class="mt-2 w-full bg-panel hover:bg-gray-700/50 text-white font-bold py-2 px-4 rounded-md transition-colors">Capture Snapshot</button>
+                                </div>
+                           </div>
+                             <div class="flex justify-end space-x-4 pt-4">
+                                <button type="button" class="cancel-form-btn bg-gray-600/50 hover:bg-gray-600/80 text-white font-bold py-2 px-6 rounded-md transition-colors">Cancel</button>
+                                <button type="submit" class="bg-accent text-gray-900 font-bold py-2 px-6 rounded-md hover:bg-opacity-90 transition duration-300">Register Guest</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+
+                <!-- User Access Control Page -->
+                <div id="user-access-page" class="page hidden">
+                    <div>
+                        <h3 class="text-2xl font-bold">Access Control</h3>
+                        <p class="text-gray-400 mb-6">Manage access for <span id="user-access-name" class="font-semibold accent-color"></span>.</p>
+                    </div>
+                    <div class="bg-panel rounded-lg border-panel shadow-lg p-6">
+                        <form id="user-access-form">
+                            <div class="flex items-center mb-8">
+                                <img id="user-access-image" src="https://placehold.co/80x80/FFFFFF/0C1F3F?text=G" class="w-20 h-20 rounded-full mr-6">
+                                <div>
+                                    <h4 id="user-access-name-main" class="text-xl font-bold">Guest Name</h4>
+                                    <p id="user-access-role" class="text-gray-400">Guest Role</p>
+                                </div>
+                            </div>
+
+                            <div class="space-y-8">
+                                <div>
+                                    <h5 class="text-lg font-semibold mb-3">Access Zones</h5>
+                                    <div id="access-zones-list" class="space-y-4">
+                                        <!-- Access zones will be injected here -->
+                                    </div>
+                                </div>
+                                 <div>
+                                    <h5 class="text-lg font-semibold mb-3">Access Schedules</h5>
+                                    <div id="access-schedules-list" class="space-y-4">
+                                        <!-- Access schedules will be injected here -->
+                                    </div>
+                                </div>
+                            </div>
+                             <div class="flex justify-end space-x-4 pt-8">
+                                <button type="button" id="cancel-user-access" class="bg-gray-600/50 hover:bg-gray-600/80 text-white font-bold py-2 px-6 rounded-md transition-colors">Cancel</button>
+                                <button type="submit" id="save-user-access-btn" class="bg-accent text-gray-900 font-bold py-2 px-6 rounded-md hover:bg-opacity-90 transition duration-300">Save Changes</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Camera Detail Page -->
+                <div id="camera-detail-page" class="page hidden">
+                    <div class="text-sm text-gray-400 mb-4">
+                        <a href="#cameras" class="hover:underline nav-link">Cameras</a> / 
+                        <span id="camera-detail-breadcrumb" class="font-semibold accent-color">Lobby Camera</span>
+                    </div>
+                    <div class="mb-6">
+                        <h3 id="camera-detail-title" class="text-3xl font-bold">Lobby Camera</h3>
+                        <p id="camera-detail-location" class="text-gray-400">Main Entrance, Floor 1</p>
+                    </div>
+                    <div class="mb-8 bg-panel p-4 rounded-lg border-panel shadow-lg">
+                        <img id="camera-detail-feed" src="https://placehold.co/1200x675/11284D/333333?text=Live+Feed" class="rounded-md w-full object-cover aspect-video">
+                    </div>
+                    <h3 class="text-xl font-semibold mb-4">Live Face Detection Log</h3>
+                    <div class="bg-panel rounded-lg border-panel shadow-lg overflow-hidden">
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left">
+                                <thead class="bg-main">
+                                    <tr>
+                                        <th class="p-4 font-semibold">Snapshot</th>
+                                        <th class="p-4 font-semibold">Name</th>
+                                        <th class="p-4 font-semibold">Time</th>
+                                        <th class="p-4 font-semibold">Confidence</th>
+                                        <th class="p-4 font-semibold text-center">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="camera-detail-log"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Entry Detail Page -->
+                <div id="entry-detail-page" class="page hidden">
+                    <div class="text-sm text-gray-400 mb-4">
+                        <a href="#cameras" class="hover:underline nav-link">Logs</a> / 
+                        <a id="entry-detail-cam-breadcrumb" href="#" class="hover:underline nav-link">Camera</a> /
+                        <span class="font-semibold accent-color">Entry Details</span>
+                    </div>
+                     <div class="bg-panel rounded-lg border-panel p-6">
+                        <h3 id="entry-detail-title" class="text-2xl font-bold mb-6">Camera 1 Entry Details</h3>
+                        <div class="flex flex-col md:flex-row gap-6">
+                            <div class="md:w-1/3">
+                                 <img id="entry-detail-image" src="https://placehold.co/400x400/CCCCCC/333333?text=Face" class="w-full rounded-lg object-cover aspect-square">
+                            </div>
+                            <div class="md:w-2/3">
+                                <div class="grid grid-cols-2 gap-4 text-sm mb-6">
+                                    <div>
+                                        <p class="text-gray-400">Timestamp</p>
+                                        <p id="entry-detail-timestamp" class="font-semibold">2024-01-01 10:30:00</p>
+                                    </div>
+                                      <div>
+                                        <p class="text-gray-400">Status</p>
+                                        <p id="entry-detail-status" class="font-semibold">Known</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-gray-400">Name</p>
+                                        <p id="entry-detail-name" class="font-semibold">Bapak Ouk</p>
+                                    </div>
+                                       <div>
+                                        <p class="text-gray-400">Additional Data</p>
+                                        <p id="entry-detail-data" class="font-semibold">Employee ID: 12345</p>
+                                    </div>
+                                </div>
+
+                                <h4 class="text-lg font-semibold mb-3">Detection History</h4>
+                                <div class="bg-main rounded-lg border-panel shadow-inner overflow-hidden max-h-60 overflow-y-auto">
+                                     <table class="w-full text-left text-sm">
+                                        <thead class="bg-panel">
+                                            <tr>
+                                                <th class="p-3 font-semibold">Camera</th>
+                                                <th class="p-3 font-semibold">Timestamp</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="entry-detail-history"></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                     </div>
+                     <div class="mt-6 text-center">
+                         <button id="back-to-logs-btn" class="bg-panel hover:bg-gray-700/50 text-white font-bold py-2 px-4 rounded-md transition-colors">
+                            Back to Logs
+                        </button>
+                     </div>
+                </div>
+
+                <!-- Activity History Page -->
+                <div id="history-page" class="page hidden">
+                    <h3 class="text-2xl font-bold mb-6">Activity History</h3>
+                     <div class="mb-4">
+                        <div class="relative">
+                            <input type="text" placeholder="Search by name, date, or event" class="w-full p-3 pl-10 bg-panel border-panel rounded-md focus:outline-none focus:ring-2 focus:ring-accent">
+                            <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                                <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                            </div>
+                        </div>
+                    </div>
+                     <div class="bg-panel rounded-lg border-panel shadow-lg overflow-hidden">
+                        <div class="overflow-x-auto">
+                             <table class="w-full text-left">
+                                <thead class="bg-main">
+                                    <tr>
+                                        <th class="p-4 font-semibold">Face</th>
+                                        <th class="p-4 font-semibold">Name</th>
+                                        <th class="p-4 font-semibold">Date</th>
+                                        <th class="p-4 font-semibold">Time</th>
+                                        <th class="p-4 font-semibold">Location / Camera</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="activity-history-table"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Reports Page -->
+                <div id="reports-page" class="page hidden">
+                    <div class="flex justify-between items-center mb-6">
+                        <div>
+                            <h3 class="text-2xl font-bold">Reports</h3>
+                            <p class="text-gray-400">Generate, view, and export system reports.</p>
+                        </div>
+                        <div class="space-x-2">
+                             <button id="export-report-btn" class="bg-panel hover:bg-gray-700/50 text-white font-bold py-2 px-4 rounded-md transition-colors">Export</button>
+                             <button id="print-report-btn" class="bg-panel hover:bg-gray-700/50 text-white font-bold py-2 px-4 rounded-md transition-colors">Print</button>
+                        </div>
+                    </div>
+
+                    <!-- Summary Cards -->
+                    <div class="mb-8">
+                        <h4 class="text-lg font-semibold mb-4">Summary</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                            <div class="bg-panel p-4 rounded-lg border-panel"><p class="text-sm text-gray-400">Total Access Logs</p><p class="text-2xl font-bold">12,345</p></div>
+                            <div class="bg-panel p-4 rounded-lg border-panel"><p class="text-sm text-gray-400">Unique Guests</p><p class="text-2xl font-bold">2,567</p></div>
+                            <div class="bg-panel p-4 rounded-lg border-panel"><p class="text-sm text-gray-400">Unknown Face Detections</p><p class="text-2xl font-bold">123</p></div>
+                            <div class="bg-panel p-4 rounded-lg border-panel"><p class="text-sm text-gray-400">Most Accessed Door</p><p class="text-2xl font-bold">Main Entrance</p></div>
+                        </div>
+                    </div>
+
+                    <!-- Filters -->
+                     <div class="mb-8">
+                        <h4 class="text-lg font-semibold mb-4">Filters</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                            <input type="date" class="w-full p-3 bg-panel border border-panel rounded-md focus:outline-none focus:ring-2 focus:ring-accent">
+                            <input type="date" class="w-full p-3 bg-panel border border-panel rounded-md focus:outline-none focus:ring-2 focus:ring-accent">
+                            <input type="text" placeholder="User/Guest Name" class="w-full p-3 bg-panel border border-panel rounded-md focus:outline-none focus:ring-2 focus:ring-accent">
+                        </div>
+                    </div>
+                    
+                    <!-- Access Logs Table -->
+                     <div class="mb-8">
+                        <h4 class="text-lg font-semibold mb-4">Access Logs</h4>
+                        <div class="bg-panel rounded-lg border-panel shadow-lg overflow-hidden">
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-left">
+                                    <thead class="bg-main">
+                                        <tr>
+                                            <th class="p-4 font-semibold">Timestamp</th>
+                                            <th class="p-4 font-semibold">Name</th>
+                                            <th class="p-4 font-semibold">Entry Point</th>
+                                            <th class="p-4 font-semibold">Access/Match Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="reports-access-log-table"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Analytics -->
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                        <div class="bg-panel p-6 rounded-lg border-panel">
+                            <h4 class="font-semibold mb-4">Access Logs by Entry Point</h4>
+                            <canvas id="entry-point-chart"></canvas>
+                        </div>
+                        <div class="bg-panel p-6 rounded-lg border-panel">
+                            <h4 class="font-semibold mb-4">Access Logs Over Time</h4>
+                            <canvas id="logs-over-time-chart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Settings Page -->
+                <div id="settings-page" class="page hidden">
+                    <h3 class="text-2xl font-bold mb-6">Settings</h3>
+                    <div class="space-y-12">
+                        <!-- General Settings -->
+                        <div class="bg-panel rounded-lg border-panel shadow-lg p-6">
+                            <h4 class="text-xl font-semibold mb-4 border-b border-gray-700 pb-3">General Settings</h4>
+                            <div class="space-y-4">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="font-semibold">System Name</p>
+                                        <p class="text-sm text-gray-400">The public name of the system.</p>
+                                    </div>
+                                    <input type="text" value="SmartSecure.AI" class="w-1/2 p-2 bg-main border border-panel rounded-md focus:outline-none focus:ring-2 focus:ring-accent">
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="font-semibold">Timezone</p>
+                                        <p class="text-sm text-gray-400">Set the local timezone for all logs and reports.</p>
+                                    </div>
+                                    <select class="w-1/2 p-2 bg-main border border-panel rounded-md focus:outline-none focus:ring-2 focus:ring-accent appearance-none">
+                                        <option>Asia/Jakarta (GMT+7)</option>
+                                        <option>America/New_York (EST)</option>
+                                        <option>Europe/London (GMT)</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- User & Role Management -->
+                        <div class="bg-panel rounded-lg border-panel shadow-lg p-6">
+                            <h4 class="text-xl font-semibold mb-4 border-b border-gray-700 pb-3">User & Role Management</h4>
+                            <div class="space-y-4">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="font-semibold">Enable Public Registration</p>
+                                        <p class="text-sm text-gray-400">Allow new users to register themselves.</p>
+                                    </div>
+                                    <div class="relative inline-block w-10 mr-2 align-middle select-none transition duration-200 ease-in">
+                                        <input type="checkbox" name="public-reg" id="public-reg" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-main border-4 appearance-none cursor-pointer"/>
+                                        <label for="public-reg" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-600 cursor-pointer"></label>
+                                    </div>
+                                </div>
+                                 <div class="flex items-center justify-between">
+                                    <p class="font-semibold">Default User Role</p>
+                                    <select class="w-1/2 p-2 bg-main border border-panel rounded-md focus:outline-none focus:ring-2 focus:ring-accent appearance-none">
+                                        <option>Guest</option>
+                                        <option>Employee</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                         <!-- Data Management -->
+                        <div class="bg-panel rounded-lg border-panel shadow-lg p-6">
+                            <h4 class="text-xl font-semibold mb-4 border-b border-gray-700 pb-3">Data Management</h4>
+                            <div class="space-y-4">
+                                <div class="flex items-center justify-between">
+                                    <p class="font-semibold">Log Retention Period</p>
+                                    <select class="w-1/2 p-2 bg-main border border-panel rounded-md focus:outline-none focus:ring-2 focus:ring-accent appearance-none">
+                                        <option>30 Days</option>
+                                        <option>90 Days</option>
+                                        <option>1 Year</option>
+                                        <option>Indefinitely</option>
+                                    </select>
+                                </div>
+                                 <div class="flex items-center justify-between">
+                                    <p class="font-semibold">System Backup</p>
+                                    <button class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md transition-colors">Run Daily Backup</button>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <p class="font-semibold">Purge Data</p>
+                                    <button class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-md transition-colors">Purge All System Data</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex justify-end pt-4">
+                            <button class="bg-accent text-gray-900 font-bold py-2 px-6 rounded-md hover:bg-opacity-90 transition duration-300">Save All Settings</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+        
+        <button id="mobile-menu-button" class="md:hidden fixed bottom-4 right-4 bg-accent p-3 rounded-full shadow-lg z-50">
+            <svg class="w-6 h-6 text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+        </button>
+    </div>
+
+    <!-- ACTION MODAL -->
+    <div id="action-modal" class="modal hidden fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center p-4 z-50">
+        <div class="modal-content bg-panel rounded-lg shadow-2xl w-full max-w-sm border-panel relative">
+            <div class="p-6 text-center">
+                 <h3 class="text-xl font-bold mb-4">Face Recognition Alert</h3>
+                 <img id="modal-face-image" src="https://placehold.co/400x400/CCCCCC/333333?text=Face" class="w-full rounded-lg mb-6 object-cover aspect-square">
+                 <div class="space-y-3">
+                    <button class="modal-action-btn w-full bg-accent text-gray-900 font-bold py-3 rounded-md hover:bg-opacity-90 transition duration-300">Grant Access</button>
+                    <button class="modal-action-btn w-full bg-red-600/80 text-white font-bold py-3 rounded-md hover:bg-red-600 transition duration-300">Deny Access</button>
+                    <button class="modal-action-btn w-full bg-panel border-2 border-yellow-400/50 text-yellow-300 font-bold py-3 rounded-md hover:bg-yellow-500/10 transition duration-300">Mark as Intruder</button>
+                 </div>
+            </div>
+            <button class="modal-close-btn absolute top-3 right-3 text-gray-400 hover:text-white">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+        </div>
+    </div>
+
+    <!-- VIEW DETAILS MODAL -->
+    <div id="view-details-modal" class="modal hidden fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center p-4 z-50">
+        <div class="modal-content bg-panel rounded-lg shadow-2xl w-full max-w-3xl border-panel relative">
+             <div class="p-6">
+                <h3 class="text-xl font-bold mb-4 text-center">Face Recognition Alert Details</h3>
+                <img id="view-modal-face-image" src="https://placehold.co/400x400/CCCCCC/333333?text=Face" class="w-1/2 mx-auto rounded-lg mb-6 object-cover aspect-square">
+                
+                <h4 class="text-lg font-semibold mb-3">Recent Activity History for <span id="view-modal-person-name" class="accent-color"></span></h4>
+                <div class="bg-main rounded-lg border-panel shadow-inner overflow-hidden max-h-60 overflow-y-auto">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-sm">
+                            <thead class="bg-panel">
+                                <tr>
+                                    <th class="p-3 font-semibold">Timestamp</th>
+                                    <th class="p-3 font-semibold">Camera Location</th>
+                                    <th class="p-3 font-semibold">Event</th>
+                                    <th class="p-3 font-semibold text-center">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="view-modal-history-table"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <button class="modal-close-btn absolute top-3 right-3 text-gray-400 hover:text-white">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            let lastCameraDetailData = null; // Variable to store the last viewed camera's data
+            let lastFaceLogData = null; // Variable to store the last viewed camera log data
+            let currentStream = null;
+            let entryPointChart = null;
+            let logsOverTimeChart = null;
+
+            const loginForm = document.getElementById('login-form');
+            const loginScreen = document.getElementById('login-screen');
+            const appContainer = document.getElementById('app-container');
+            const logoutButton = document.getElementById('logout-button');
+            const pages = document.querySelectorAll('#pages .page');
+            const pageTitle = document.getElementById('page-title');
+            const pageSubtitle = document.getElementById('page-subtitle');
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const sidebar = document.getElementById('sidebar');
+            const navLinks = document.querySelectorAll('#main-nav a, .nav-link');
+            const cameraDetailPage = document.getElementById('camera-detail-page');
+            const entryDetailPage = document.getElementById('entry-detail-page');
+            const addCameraPage = document.getElementById('add-camera-page');
+            const faceLogPage = document.getElementById('face-log-page');
+            const accessManagementPage = document.getElementById('access-management-page');
+            const userAccessPage = document.getElementById('user-access-page');
+            const addUserChoicePage = document.getElementById('add-user-choice-page');
+            const registerUserPage = document.getElementById('register-user-page');
+            const registerGuestPage = document.getElementById('register-guest-page');
+
+            const liveFeedCards = document.querySelectorAll('#dashboard-page .grid > div');
+            
+            // --- MODAL ELEMENTS ---
+            const actionModal = document.getElementById('action-modal');
+            const viewDetailsModal = document.getElementById('view-details-modal');
+            const allModals = document.querySelectorAll('.modal');
+            const actionBtns = document.querySelectorAll('.action-btn');
+            const viewBtns = document.querySelectorAll('.view-btn');
+            const modalFaceImage = document.getElementById('modal-face-image');
+            const viewModalFaceImage = document.getElementById('view-modal-face-image');
+            const viewModalPersonName = document.getElementById('view-modal-person-name');
+            const viewModalHistoryTable = document.getElementById('view-modal-history-table');
+
+            // --- Entry Detail Page Elements ---
+            const backToLogsBtn = document.getElementById('back-to-logs-btn');
+            
+            // --- Add Camera Page Elements ---
+            const addCameraBtn = document.getElementById('add-camera-btn');
+            const addCameraForm = document.getElementById('add-camera-form');
+            const cancelAddCameraBtn = document.getElementById('cancel-add-camera');
+            
+            // --- Access Management & User Registration ---
+            const addUserBtn = document.getElementById('add-user-btn');
+            const goToRegisterUserBtn = document.getElementById('go-to-register-user-btn');
+            const goToRegisterGuestBtn = document.getElementById('go-to-register-guest-btn');
+            const cancelFormBtns = document.querySelectorAll('.cancel-form-btn');
+            const cancelUserAccessBtn = document.getElementById('cancel-user-access');
+            const saveUserAccessBtn = document.getElementById('save-user-access-btn');
+            const userAccessForm = document.getElementById('user-access-form');
+            const captureUserBtn = document.getElementById('capture-user-btn');
+            const captureGuestBtn = document.getElementById('capture-guest-btn');
+            const registerUserForm = document.getElementById('register-user-form');
+            const registerGuestForm = document.getElementById('register-guest-form');
+            
+            // --- Reports Page ---
+            const exportReportBtn = document.getElementById('export-report-btn');
+            const printReportBtn = document.getElementById('print-report-btn');
+
+
+            const pageDetails = {
+                'dashboard': { title: 'Dashboard', subtitle: 'Overview of all security systems' },
+                'cameras': { title: 'Cameras', subtitle: 'Manage all connected devices' },
+                'access-management': { title: 'Access Management', subtitle: 'Manage your user and guest list.' },
+                'history': { title: 'Activity History', subtitle: 'View all system and access events.' },
+                'reports': { title: 'Reports', subtitle: 'Generate, view, and export system reports.' },
+                'settings': { title: 'Settings', subtitle: 'Configure users, roles, and system options' },
+                'add-camera': { title: 'Add Camera', subtitle: 'Register a new device to the system' },
+                'face-log': { title: 'Face Recognition Log', subtitle: 'Detailed log of recognized and unrecognized faces.'},
+                'user-access': { title: 'Access Control', subtitle: 'Manage access for a specific user.'},
+                'add-user-choice': { title: 'Add User', subtitle: 'Select the type of person to register.' },
+                'register-user': { title: 'Register New User', subtitle: 'Add a permanent employee to the system.' },
+                'register-guest': { title: 'Register Guest', subtitle: 'Add a temporary visitor to the system.' },
+            };
+            
+            // --- GENERAL MODAL LOGIC ---
+            const closeModal = () => {
+                allModals.forEach(modal => modal.classList.add('hidden'));
+            };
+
+            document.querySelectorAll('.modal-close-btn, .modal-action-btn').forEach(btn => {
+                btn.addEventListener('click', closeModal);
+            });
+            allModals.forEach(modal => {
+                 modal.addEventListener('click', (e) => {
+                    if (e.target === modal) closeModal();
+                });
+            });
+
+
+            // --- ACTION MODAL LOGIC ---
+            actionBtns.forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const row = e.target.closest('tr');
+                    const smallImgSrc = row.querySelector('img').src;
+                    modalFaceImage.src = smallImgSrc.replace('32x32', '400x400');
+                    actionModal.classList.remove('hidden');
+                });
+            });
+            
+            // --- VIEW DETAILS MODAL LOGIC ---
+            viewBtns.forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const row = e.target.closest('tr');
+                    const image = row.querySelector('img');
+                    const smallImgSrc = image.src;
+                    const personName = image.getAttribute('data-name');
+                    
+                    viewModalFaceImage.src = smallImgSrc.replace('32x32', '400x400');
+                    viewModalPersonName.textContent = personName;
+
+                    const mockHistory = [
+                        { time: '02:15:33 PM', camera: 'Main Entrance', action: 'Entry Attempt' },
+                    ];
+
+                    viewModalHistoryTable.innerHTML = mockHistory.map(log => `
+                        <tr class="border-t border-panel hover:bg-gray-800/20">
+                            <td class="p-3 text-gray-400">${log.time}</td>
+                            <td class="p-3">${log.camera}</td>
+                            <td class="p-3">${log.action}</td>
+                            <td class="p-3 text-center whitespace-nowrap">
+                                <button class="text-green-400 hover:underline text-xs">Grant Access</button>
+                                <span class="text-gray-600 mx-1">|</span>
+                                <button class="text-red-400 hover:underline text-xs">Deny</button>
+                                <span class="text-gray-600 mx-1">|</span>
+                                <button class="text-yellow-400 hover:underline text-xs">Intruder</button>
+                            </td>
+                        </tr>
+                    `).join('');
+
+                    viewDetailsModal.classList.remove('hidden');
+                });
+            });
+
+            // --- USER ACCESS CONTROL PAGE ---
+            const showUserAccessPage = (userData) => {
+                pages.forEach(p => p.classList.add('hidden'));
+
+                document.getElementById('user-access-name').textContent = userData.name;
+                document.getElementById('user-access-name-main').textContent = userData.name;
+                document.getElementById('user-access-role').textContent = userData.status;
+                document.getElementById('user-access-image').src = `https://placehold.co/80x80/FFFFFF/0C1F3F?text=${userData.name.charAt(0)}`;
+                
+                const createToggle = (id, title, description, checked = false) => `
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="font-semibold">${title}</p>
+                            <p class="text-sm text-gray-400">${description}</p>
+                        </div>
+                        <div class="relative inline-block w-10 mr-2 align-middle select-none transition duration-200 ease-in">
+                            <input type="checkbox" name="${id}" id="${id}" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-main border-4 appearance-none cursor-pointer" ${checked ? 'checked' : ''}/>
+                            <label for="${id}" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-600 cursor-pointer"></label>
+                        </div>
+                    </div>`;
+
+                const zonesList = document.getElementById('access-zones-list');
+                const zones = [
+                    { id: 'all-zones', title: 'All Zones', desc: 'All access' },
+                    { id: 'main-entrance', title: 'Main Entrance', desc: 'Access to the main entrance', checked: true },
+                    { id: 'office-area', title: 'Office', desc: 'Access to the office area', checked: true },
+                    { id: 'server-room', title: 'Server Room', desc: 'Access to the server room', checked: false }
+                ];
+                zonesList.innerHTML = zones.map(z => createToggle(z.id, z.title, z.desc, z.checked)).join('');
+
+                const schedulesList = document.getElementById('access-schedules-list');
+                const schedules = [
+                    { id: 'always', title: 'Always', desc: '24/7 access'},
+                    { id: 'business-hours', title: 'Business Hours', desc: 'Access during business hours', checked: true },
+                ];
+                schedulesList.innerHTML = schedules.map(s => createToggle(s.id, s.title, s.desc, s.checked)).join('');
+
+                saveUserAccessBtn.disabled = true;
+                saveUserAccessBtn.classList.add('opacity-50', 'cursor-not-allowed');
+
+                userAccessForm.addEventListener('change', () => {
+                    saveUserAccessBtn.disabled = false;
+                    saveUserAccessBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+                }, { once: true });
+
+                userAccessPage.classList.remove('hidden');
+                showPage('#user-access');
+            };
+
+            cancelUserAccessBtn.addEventListener('click', () => showPage('#access-management'));
+            userAccessForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                alert('Changes saved successfully!');
+                showPage('#access-management');
+            });
+
+
+            // --- ACCESS MANAGEMENT PAGE ---
+            const allUsers = [
+                { name: 'Sophia Carter', email: 'sophia.carter@example.com', org: 'Sales Dept.', status: 'Employee', lastVisit: '2025-06-07', type: 'employee' },
+                { name: 'Owen Bennett', email: 'owen.bennett@example.com', org: 'Tech Innovators Inc.', status: 'Guest', lastVisit: '2025-06-08', type: 'guest' },
+                { name: 'Liam Johnson', email: 'liam.j@corp.net', org: 'Engineering', status: 'Employee', lastVisit: '2025-06-08', type: 'employee' },
+                { name: 'Lucas Hayes', email: 'lucas.hayes@example.com', org: 'Future Dynamics Corp.', status: 'Guest', lastVisit: '2025-06-05', type: 'guest' },
+            ];
+
+            const renderUserTable = (filter) => {
+                const userTableBody = document.getElementById('user-list-table');
+                const filteredUsers = allUsers.filter(user => filter === 'all' || user.type === filter);
+                
+                if (filteredUsers.length === 0) {
+                    userTableBody.innerHTML = `<tr><td colspan="6" class="p-4 text-center text-gray-400">No users found.</td></tr>`;
+                    return;
+                }
+
+                userTableBody.innerHTML = filteredUsers.map(user => {
+                     const statusClass = user.status === 'Employee' ? 'bg-blue-500/20 text-blue-300' : 'bg-purple-500/20 text-purple-300';
+                     return `
+                        <tr class="border-t border-panel hover:bg-gray-800/20">
+                            <td class="p-4 font-semibold">${user.name}</td>
+                            <td class="p-4 text-gray-400">${user.email}</td>
+                            <td class="p-4">${user.org}</td>
+                            <td class="p-4"><span class="${statusClass} px-2 py-1 rounded-full text-xs font-semibold">${user.status}</span></td>
+                            <td class="p-4 text-gray-400">${user.lastVisit}</td>
+                            <td class="p-4"><button class="user-view-btn text-accent hover:underline text-sm font-semibold" data-name="${user.name}" data-status="${user.status}">View</button></td>
+                        </tr>
+                     `;
+                }).join('');
+
+                userTableBody.querySelectorAll('.user-view-btn').forEach(btn => {
+                    btn.addEventListener('click', e => {
+                        const userData = e.currentTarget.dataset;
+                        showUserAccessPage(userData);
+                    })
+                });
+            };
+
+            const setupAccessManagementPage = () => {
+                renderUserTable('all'); // Initial render
+                const userTabs = document.querySelectorAll('.user-tab');
+                userTabs.forEach(tab => {
+                    tab.addEventListener('click', e => {
+                        e.preventDefault();
+                        userTabs.forEach(t => t.classList.remove('user-tab-active', 'text-accent'));
+                        tab.classList.add('user-tab-active', 'text-accent');
+                        renderUserTable(tab.dataset.filter);
+                    });
+                });
+            };
+            
+            // --- ACTIVITY HISTORY PAGE ---
+            const setupActivityHistoryPage = () => {
+                const historyTableBody = document.getElementById('activity-history-table');
+                const mockHistory = [
+                    { face: 'EC', name: 'Ethan Carter', date: '2025-06-09', time: '10:30 AM', location: 'Front Door Camera' },
+                    { face: 'OB', name: 'Olivia Bennett', date: '2025-06-09', time: '11:45 AM', location: 'Back Door Camera' },
+                    { face: 'LH', name: 'Liam Harper', date: '2025-06-09', time: '12:15 PM', location: 'Lobby Camera' },
+                    { face: 'SE', name: 'Sophia Evans', date: '2025-06-08', time: '01:30 PM', location: 'Parking Lot Camera' },
+                    { face: 'NF', name: 'Noah Foster', date: '2025-06-08', time: '02:45 PM', location: 'Front Door Camera' },
+                ];
+                
+                historyTableBody.innerHTML = mockHistory.map(item => `
+                    <tr class="border-t border-panel hover:bg-gray-800/20">
+                        <td class="p-4"><img src="https://placehold.co/40x40/FFFFFF/0C1F3F?text=${item.face}" class="w-10 h-10 rounded-full"></td>
+                        <td class="p-4 font-semibold">${item.name}</td>
+                        <td class="p-4 text-gray-400">${item.date}</td>
+                        <td class="p-4 text-gray-400">${item.time}</td>
+                        <td class="p-4">${item.location}</td>
+                    </tr>
+                `).join('');
+            };
+            
+             // --- REPORTS PAGE ---
+            const setupReportsPage = () => {
+                if(entryPointChart) entryPointChart.destroy();
+                if(logsOverTimeChart) logsOverTimeChart.destroy();
+                
+                const reportsLogTable = document.getElementById('reports-access-log-table');
+                const reportLogs = [
+                    { time: '2025-06-09 10:30 AM', name: 'Ethan Carter', entry: 'Front Door', status: 'Matched' },
+                    { time: '2025-06-09 11:45 AM', name: 'Olivia Bennett', entry: 'Back Door', status: 'Matched' },
+                    { time: '2025-06-09 12:15 PM', name: 'Liam Harper', entry: 'Lobby', status: 'Unmatched' },
+                ];
+                reportsLogTable.innerHTML = reportLogs.map(log => `
+                     <tr class="border-t border-panel hover:bg-gray-800/20">
+                        <td class="p-4 text-gray-400">${log.time}</td>
+                        <td class="p-4 font-semibold">${log.name}</td>
+                        <td class="p-4">${log.entry}</td>
+                        <td class="p-4"><span class="${log.status === 'Matched' ? 'text-green-400' : 'text-yellow-400'}">${log.status}</span></td>
+                    </tr>
+                `).join('');
+
+                const entryPointCtx = document.getElementById('entry-point-chart').getContext('2d');
+                entryPointChart = new Chart(entryPointCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Front Door', 'Back Door', 'Lobby', 'Parking'],
+                        datasets: [{
+                            label: 'Access Logs by Entry Point',
+                            data: [120, 80, 250, 150],
+                            backgroundColor: 'rgba(0, 255, 171, 0.2)',
+                            borderColor: 'rgba(0, 255, 171, 1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: { scales: { y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.1)' }, ticks: { color: '#E0E0E0' } }, x: { grid: { color: 'rgba(255,255,255,0.1)' }, ticks: { color: '#E0E0E0' } } }, plugins: { legend: { display: false } } }
+                });
+
+                const logsOverTimeCtx = document.getElementById('logs-over-time-chart').getContext('2d');
+                logsOverTimeChart = new Chart(logsOverTimeCtx, {
+                    type: 'line',
+                    data: {
+                        labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                        datasets: [{
+                            label: 'Access Logs Over Time',
+                            data: [65, 59, 80, 81, 56, 55, 40],
+                            fill: false,
+                            borderColor: '#00FFAB',
+                            tension: 0.1
+                        }]
+                    },
+                    options: { scales: { y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.1)' }, ticks: { color: '#E0E0E0' } }, x: { grid: { color: 'rgba(255,255,255,0.1)' }, ticks: { color: '#E0E0E0' } } }, plugins: { legend: { display: false } } }
+                });
+            };
+            
+            exportReportBtn.addEventListener('click', () => alert('Exporting report... (Feature not implemented)'));
+            printReportBtn.addEventListener('click', () => alert('Printing report... (Feature not implemented)'));
+
+
+            // --- FACE LOG PAGE ---
+            const showFaceLogPage = (cameraData) => {
+                lastFaceLogData = cameraData; 
+                pages.forEach(p => p.classList.add('hidden'));
+
+                document.getElementById('face-log-title').textContent = `${cameraData.name}: Face Recognition Log`;
+                
+                const logTableBody = document.getElementById('face-log-table');
+                const mockLogs = [
+                    { time: '10:23 AM', eventId: 'E12345', name: 'Ethan Harper', status: 'Recognized', img: 'EH' },
+                ];
+
+                logTableBody.innerHTML = mockLogs.map(log => {
+                    const statusClass = log.status === 'Recognized' ? 'bg-green-500/20 text-green-300' : 'bg-yellow-500/20 text-yellow-300';
+                    return `
+                        <tr class="border-t border-panel hover:bg-gray-800/20">
+                            <td class="p-4 text-gray-400">${log.time}</td>
+                            <td class="p-4">${log.eventId}</td>
+                            <td class="p-4"><img src="https://placehold.co/32x32/FFFFFF/0C1F3F?text=${log.img}" class="w-8 h-8 rounded-full"></td>
+                            <td class="p-4"><span class="${statusClass} px-2 py-1 rounded-full text-xs font-semibold">${log.status}</span></td>
+                            <td class="p-4"><button class="face-log-details-btn text-accent hover:underline text-sm font-semibold" data-name="${log.name}" data-time="${log.time}" data-img-char="${log.img}">View Details</button></td>
+                        </tr>
+                    `;
+                }).join('');
+
+                logTableBody.querySelectorAll('.face-log-details-btn').forEach(btn => {
+                    btn.addEventListener('click', e => {
+                         const button = e.currentTarget;
+                         const logData = {
+                             imgSrc: `https://placehold.co/40x40/FFFFFF/0C1F3F?text=${button.dataset.imgChar}`,
+                             name: button.dataset.name,
+                             time: button.dataset.time,
+                             confidence: 'N/A' 
+                         };
+                         lastCameraDetailData = { name: cameraData.name };
+                         showEntryDetail(logData);
+                    });
+                });
+
+                faceLogPage.classList.remove('hidden');
+                pageTitle.textContent = pageDetails['face-log'].title;
+                pageSubtitle.textContent = pageDetails['face-log'].subtitle;
+            };
+
+
+            // --- ENTRY DETAIL PAGE LOGIC ---
+            const showEntryDetail = (logData) => {
+                pages.forEach(p => p.classList.add('hidden'));
+
+                document.getElementById('entry-detail-title').textContent = `${lastCameraDetailData.name} Entry Details`;
+                document.getElementById('entry-detail-cam-breadcrumb').textContent = lastCameraDetailData.name;
+                document.getElementById('entry-detail-image').src = logData.imgSrc.replace('40x40', '400x400').replace('32x32', '400x400');
+                document.getElementById('entry-detail-timestamp').textContent = logData.time;
+                document.getElementById('entry-detail-status').textContent = 'Known'; 
+                document.getElementById('entry-detail-name').textContent = logData.name;
+                document.getElementById('entry-detail-data').textContent = `Confidence: ${logData.confidence}`;
+
+                const historyTable = document.getElementById('entry-detail-history');
+                const mockHistory = [ { camera: 'Lobby Cam', time: '10:15 AM' } ];
+                 historyTable.innerHTML = mockHistory.map(log => `
+                     <tr class="border-t border-panel hover:bg-gray-800/20">
+                        <td class="p-3">${log.camera}</td>
+                        <td class="p-3 text-gray-400">${log.time}</td>
+                    </tr>
+                `).join('');
+
+                entryDetailPage.classList.remove('hidden');
+                pageTitle.textContent = "Entry Details";
+                pageSubtitle.textContent = `Log from ${lastCameraDetailData.name} at ${logData.time}`;
+            };
+            
+            backToLogsBtn.addEventListener('click', () => {
+                 if (lastFaceLogData) {
+                    showFaceLogPage(lastFaceLogData);
+                } else if (lastCameraDetailData) {
+                    showCameraDetail(lastCameraDetailData);
+                } else {
+                    showPage('#cameras'); 
+                }
+            });
+
+
+            // --- Show Camera Detail View ---
+            const showCameraDetail = (cameraData) => {
+                lastCameraDetailData = cameraData; 
+                lastFaceLogData = null;
+                pages.forEach(p => p.classList.add('hidden'));
+
+                document.getElementById('camera-detail-breadcrumb').textContent = cameraData.name;
+                document.getElementById('camera-detail-title').textContent = cameraData.name;
+                document.getElementById('camera-detail-location').textContent = cameraData.location;
+                document.getElementById('camera-detail-feed').src = cameraData.feedSrc.replace('600x400', '1200x675');
+                
+                const logTableBody = document.getElementById('camera-detail-log');
+                const mockLogs = [ { img: 'EH', name: 'Ethan Harper', time: '10:15 AM', confidence: '98%' } ];
+                logTableBody.innerHTML = mockLogs.map(log => `
+                    <tr class="border-t border-panel hover:bg-gray-800/20">
+                        <td class="p-4"><img src="https://placehold.co/40x40/FFFFFF/0C1F3F?text=${log.img}" class="w-10 h-10 rounded-full" data-name="${log.name}" data-time="${log.time}" data-confidence="${log.confidence}"></td>
+                        <td class="p-4">${log.name}</td>
+                        <td class="p-4">${log.time}</td>
+                        <td class="p-4"><span class="accent-color font-semibold">${log.confidence}</span></td>
+                        <td class="p-4 text-center"><button class="camera-log-view-btn text-accent hover:underline">View</button></td>
+                    </tr>
+                `).join('');
+
+                logTableBody.querySelectorAll('.camera-log-view-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const row = e.target.closest('tr');
+                        const img = row.querySelector('img');
+                        const logData = {
+                            imgSrc: img.src,
+                            name: img.dataset.name,
+                            time: img.dataset.time,
+                            confidence: img.dataset.confidence
+                        };
+                        showEntryDetail(logData);
+                    });
+                });
+
+                cameraDetailPage.classList.remove('hidden');
+                pageTitle.textContent = cameraData.name;
+                pageSubtitle.textContent = "Live View & Event Log";
+                document.querySelectorAll('#main-nav a').forEach(link => link.classList.remove('nav-active'));
+            }
+            
+            // --- CAMERA/SNAPSHOT LOGIC ---
+            const stopCamera = () => {
+                if (currentStream) {
+                    currentStream.getTracks().forEach(track => track.stop());
+                }
+                currentStream = null;
+            };
+
+            const startCamera = async (videoElement, canvasElement) => {
+                stopCamera(); // Stop any existing streams
+                 videoElement.classList.remove('hidden');
+                 canvasElement.classList.add('hidden');
+                try {
+                    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+                        currentStream = await navigator.mediaDevices.getUserMedia({ video: true });
+                        videoElement.srcObject = currentStream;
+                    }
+                } catch (error) {
+                    console.error("Error accessing camera:", error);
+                    alert("Could not access the camera. Please ensure you have given permission.");
+                }
+            };
+
+            const captureSnapshot = (videoElement, canvasElement) => {
+                 if (currentStream) {
+                    const context = canvasElement.getContext('2d');
+                    canvasElement.width = videoElement.videoWidth;
+                    canvasElement.height = videoElement.videoHeight;
+                    context.drawImage(videoElement, 0, 0, videoElement.videoWidth, videoElement.videoHeight);
+                    videoElement.classList.add('hidden');
+                    canvasElement.classList.remove('hidden');
+                    stopCamera();
+                }
+            };
+
+            captureUserBtn.addEventListener('click', () => captureSnapshot(document.getElementById('user-video'), document.getElementById('user-canvas')));
+            captureGuestBtn.addEventListener('click', () => captureSnapshot(document.getElementById('guest-video'), document.getElementById('guest-canvas')));
+
+
+            // --- NAVIGATION LOGIC ---
+            const showPage = (hash) => {
+                stopCamera(); // Always stop camera when navigating
+                const pageKey = (hash.substring(1) || 'dashboard').split('/')[0];
+                const pageId = pageKey + '-page';
+                
+                pages.forEach(p => p.classList.add('hidden'));
+
+                const targetPage = document.getElementById(pageId);
+                if (targetPage) {
+                    targetPage.classList.remove('hidden');
+                    if (pageId === 'access-management-page') {
+                        setupAccessManagementPage();
+                    } else if (pageId === 'history-page') {
+                        setupActivityHistoryPage();
+                    } else if (pageId === 'reports-page') {
+                        setupReportsPage();
+                    }
+                    else if (pageId === 'register-user-page') {
+                        startCamera(document.getElementById('user-video'), document.getElementById('user-canvas'));
+                    } else if (pageId === 'register-guest-page') {
+                        startCamera(document.getElementById('guest-video'), document.getElementById('guest-canvas'));
+                    }
+                } else {
+                    document.getElementById('dashboard-page').classList.remove('hidden');
+                }
+
+                document.querySelectorAll('#main-nav a').forEach(link => {
+                    const linkHash = link.getAttribute('href').substring(1);
+                    if (linkHash === pageKey || (pageKey.startsWith('add-user') && linkHash === 'access-management') || (pageKey.startsWith('register') && linkHash === 'access-management') || (pageKey.startsWith('user-access') && linkHash === 'access-management')) {
+                         link.classList.add('nav-active');
+                    } else {
+                        link.classList.remove('nav-active');
+                    }
+                });
+
+                const details = pageDetails[pageKey];
+                if(details) {
+                    pageTitle.textContent = details.title;
+                    pageSubtitle.textContent = details.subtitle;
+                }
+            };
+            
+            addUserBtn.addEventListener('click', () => showPage('#add-user-choice'));
+            goToRegisterUserBtn.addEventListener('click', () => showPage('#register-user'));
+            goToRegisterGuestBtn.addEventListener('click', () => showPage('#register-guest'));
+            cancelFormBtns.forEach(btn => btn.addEventListener('click', () => showPage('#access-management')));
+
+            addCameraBtn.addEventListener('click', () => showPage('#add-camera') );
+            cancelAddCameraBtn.addEventListener('click', () => showPage('#cameras') );
+            addCameraForm.addEventListener('submit', (e) => { e.preventDefault(); showPage('#cameras'); });
+            
+            registerUserForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                alert('New user registered successfully!');
+                showPage('#access-management');
+            });
+            registerGuestForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                alert('Guest registered successfully!');
+                showPage('#access-management');
+            });
+
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const hash = e.currentTarget.getAttribute('href');
+                    history.pushState(null, '', hash);
+                    showPage(hash);
+                    if(window.innerWidth < 768) {
+                        sidebar.classList.add('-translate-x-full');
+                    }
+                });
+            });
+
+            window.addEventListener('popstate', (event) => {
+                showPage(window.location.hash || '#dashboard');
+            });
+
+            // --- Authentication Simulation ---
+            loginForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                loginScreen.classList.add('hidden');
+                appContainer.classList.remove('hidden');
+                appContainer.classList.add('flex');
+                showPage(window.location.hash || '#dashboard');
+            });
+
+            logoutButton.addEventListener('click', () => {
+                appContainer.classList.add('hidden');
+                appContainer.classList.remove('flex');
+                loginScreen.classList.remove('hidden');
+                history.pushState(null, '', ' ');
+            });
+            
+            // --- Event Listeners for Live Feed Cards ---
+            liveFeedCards.forEach(card => {
+                if (!card.querySelector('img[src*="Offline"]')) {
+                    card.style.cursor = 'pointer';
+                    card.addEventListener('click', () => {
+                        const cameraData = {
+                            name: card.querySelector('p.font-semibold').textContent,
+                            location: card.querySelector('.relative') ? 'Main Entrance, Floor 1' : 'Location Placeholder',
+                            feedSrc: card.querySelector('img').src,
+                        };
+                        showCameraDetail(cameraData);
+                        history.pushState({camera: cameraData.name}, '', `#cameras/${cameraData.name.replace(/\s+/g, '-')}`);
+                    });
+                }
+            });
+
+            // --- Event Listeners for Camera List Page ---
+            const setupCameraListNavigation = () => {
+                 document.querySelectorAll('#camera-list-table .view-logs-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const button = e.currentTarget;
+                        const cameraData = {
+                            name: button.dataset.cameraName
+                        };
+                        showFaceLogPage(cameraData);
+                        history.pushState({camera: cameraData.name}, '', `#face-log/${cameraData.name.replace(/\s+/g, '-')}`);
+                    });
+                });
+            };
+            
+            setupCameraListNavigation();
+
+            // --- Mobile Menu ---
+            const setupMobileSidebar = () => {
+                if (window.innerWidth < 768) {
+                    sidebar.classList.add('fixed', 'h-full', 'z-40', 'top-0', 'left-0', '-translate-x-full');
+                } else {
+                    sidebar.classList.remove('fixed', 'h-full', 'z-40', 'top-0', 'left-0', '-translate-x-full');
+                }
+            };
+            
+            mobileMenuButton.addEventListener('click', () => {
+                sidebar.classList.toggle('-translate-x-full');
+            });
+            
+            // Initial setup call
+            setupMobileSidebar();
+            window.addEventListener('resize', setupMobileSidebar);
+            
+            if (appContainer.style.display !== 'hidden') {
+                 showPage(window.location.hash || '#dashboard');
+            }
+        });
+    </script>
+</body>
+</html>
