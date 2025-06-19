@@ -5,6 +5,9 @@
     "author": "Netlify",
     "type": "module",
     "license": "ISC",
+    "scripts": {
+        "dev": "netlify dev"
+    },
     "dependencies": {
         "@modelcontextprotocol/sdk": "^1.10.2",
         "@netlify/functions": "^2.5.1",
